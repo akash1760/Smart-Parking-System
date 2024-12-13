@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book a Parking Slot</title>
+  <style>
+    /* Add simple styles for layout */
+    .booking-container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    .slot {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Book a Parking Slot</h1>
+<div class="booking-container">
+  <label for="location">Select Location:</label>
+  <select id="location" onchange="loadSlots()">
+    <option value="New Delhi">New Delhi</option>
+    <option value="Mumbai">Mumbai</option>
+    <option value="Bangalore">Bangalore</option>
+    <!-- Add other locations as needed -->
+  </select>
+
+  <h2>Available Slots</h2>
+  <div id="slots-container">
+    <!-- Slots will be loaded here dynamically -->
+  </div>
+</div>
+
+<!-- <script>
+// Function to load slots based on location
+function loadSlots() {
+  const location = document.getElementById('location').value;
+  fetch(`/api/getSlots?location=${location}`)
+    .then(response => response.json())
+    .then(data => {
+      const slotsContainer = document.getElementById('slots-container');
+      slotsContainer.innerHTML = '';
+      data.forEach(slot => {
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('slot');
+        slotDiv.innerHTML = `
+          <span>Slot #${slot.slot_number}</span>
+          <button ${slot.status === 'booked' ? 'disabled' : ''} onclick="bookSlot(${slot.id})">
+            ${slot.status === 'available' ? 'Book Now' : 'Booked'}
+          </button>
+        `;
+        slotsContainer.appendChild(slotDiv);
+      });
+    })
+    .catch(error => console.error('Error fetching slots:', error));
+}
+
+// Function to book a slot
+function bookSlot(slotId) {
+  fetch(`/api/bookSlot`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ slotId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Slot booked successfully!');
+      loadSlots(); // Refresh slots
+    } else {
+      alert('Failed to book the slot.');
+    }
+  })
+  .catch(error => console.error('Error booking slot:', error));
+}
+
+// Load slots for default location on page load
+window.onload = loadSlots;
+</script> -->
+
+</body>
+</html>

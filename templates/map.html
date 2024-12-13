@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parking Locations in India</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 600px;
+        width: 100%;
+      }
+      #video-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+      video {
+        width: 80%;
+        height: auto;
+        border: 2px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Parking Locations</h1>
+    <div id="map"></div>
+
+    <div id="video-container">
+      <h3>Parking Video Feed</h3>
+      <video id="parking-video" controls>
+        <source src="" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      var map = L.map('map').setView([20.5937, 78.9629], 5);  
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+
+      const cityData = {
+    'New Delhi': { coords: [28.6139, 77.2090], video: 'videos/delhi.mp4' },
+    'Bangalore': { coords: [12.9716, 77.5946], video: 'videos/bangalore.mp4' },
+    'Chennai': { coords: [13.0827, 80.2707], video: 'videos/chennai.mp4' },
+    'Kolkata': { coords: [22.5726, 88.3639], video: 'videos/kolkata.mp4' },
+    'Hyderabad': { coords: [17.3850, 78.4867], video: 'videos/hyderabad.mp4' },
+    'Pune': { coords: [18.5204, 73.8567], video: 'videos/pune.mp4' },
+    'Ahmedabad': { coords: [23.0225, 72.5714], video: 'videos/ahmedabad.mp4' },
+    'Jaipur': { coords: [26.9124, 75.7873], video: 'videos/jaipur.mp4' },
+    'Chandigarh': { coords: [30.7333, 76.7794], video: 'videos/chandigarh.mp4' },
+    'Surat': { coords: [21.1702, 72.8311], video: 'videos/surat.mp4' },
+    'Lucknow': { coords: [26.8467, 80.9462], video: 'videos/lucknow.mp4' },
+    'Kanpur': { coords: [26.4499, 80.3319], video: 'videos/kanpur.mp4' },
+    'Patna': { coords: [25.5941, 85.1376], video: 'videos/patna.mp4' },
+    'Bhopal': { coords: [23.2599, 77.4126], video: 'videos/bhopal.mp4' }
+};
+
+      function updateVideo(city) {
+        var videoElement = document.getElementById('parking-video');
+        
+        if (cityVideos[city]) {
+          var videoSource = cityVideos[city];
+          videoElement.src = videoSource;
+          videoElement.load(); 
+          videoElement.play(); 
+          
+          videoElement.onloadeddata = function() {
+            console.log('Video loaded successfully');
+            videoElement.play(); 
+          };
+
+          videoElement.onerror = function() {
+            alert('Failed to load video for ' + city + '. Please try again later.');
+          };
+        } else {
+          alert('No video found for ' + city);
+        }
+      }
+
+
+      // L.marker([28.6139, 77.2090]).addTo(map)
+      //   .bindPopup('Parking Spot - New Delhi')
+      //   .on('click', function() {
+      //     updateVideo('New Delhi');
+      //   });
+
+      // L.marker([19.0760, 72.8777]).addTo(map)
+      //   .bindPopup('Parking Spot - Mumbai')
+      //   .on('click', function() {
+      //     updateVideo('Mumbai');
+      //   });
+        
+      Object.keys(cityData).forEach(city => {
+    const data = cityData[city];
+    L.marker(data.coords).addTo(map)
+        .bindPopup(`Parking Spot - ${city}`)
+        .on('click', function() {
+            updateVideo(city);
+        });
+});
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { font-family: Arial, sans-serif; color: #333; background: #f4f4f9; }
+        .container { text-align: center; padding: 20px; }
+
+        .navbar {
+            background-color: #333;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            color: #fff;
+            font-size: 1.5em;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s;
+        }
+        .navbar ul li a:hover {
+            color: #ffd700;
+        }
+
+        h2 { margin-top: 30px; font-size: 1.8em; }
+        #status { margin-top: 20px; font-size: 1.2em; }
+        #status p {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #e3e3e3;
+            display: inline-block;
+            width: 200px;
+            font-weight: bold;
+        }
+
+        .feed-container {
+            margin-top: 30px;
+        }
+        .feed-container img {
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        .feed-container img:hover {
+            transform: scale(1.05); 
+        }
+
+        footer {
+            margin-top: 40px;
+            background-color: #333;
+            color: #fff;
+            padding: 1em 0;
+        }
+        footer p { font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Smart Parking System</h1>
+        <ul>
+            <li><a href="#status">Status</a></li>
+            <li><a href="#feed">Live Feed</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="/map">View Parking Map</a></li>
+            <li><a href="/booking">Book a Parking Slot</a></li>
+
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Parking Space Status</h2>
+        <div id="status">
+            <p>Occupied Spots: <span id="occupied">Loading...</span></p>
+            <p>Available Spots: <span id="available">Loading...</span></p>
+        </div>
+
+        <h3 id="feed">Live Camera Feed</h3>
+        <div class="feed-container">
+            <img src="{{ url_for('video_feed') }}" alt="Live feed">
+        </div>
+    </div>
+
+    <footer id="contact">
+        <center>
+        <p>Contact us at support@smartparkingsystemMITADT.com | +91 9175503586</p>
+        <p>Smart Parking System © 2024. All Rights Reserved.</p>
+    </center>
+    </footer>
+
+    <script>
+        async function fetchParkingStatus() {
+            try {
+                let response = await fetch('/parking-status');
+                let data = await response.json();
+                document.getElementById('occupied').innerText = data.occupied;
+                document.getElementById('available').innerText = data.available;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        
+        setInterval(fetchParkingStatus, 3000);
+    </script>
+</body>
+</html>
